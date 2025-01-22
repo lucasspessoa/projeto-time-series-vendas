@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(10, 5))
 plt.plot(df, color="blue")
 plt.tight_layout
-plt.show()
+# plt.show()
 
 from statsmodels.tsa.seasonal import seasonal_decompose
 # Plotagem dos resultados
@@ -21,13 +21,13 @@ decomposicao.seasonal.plot(ax=axes[1], title='Componente Sazonal')
 # Componente residual
 decomposicao.resid.plot(ax=axes[2], title='Componente Residual')
 plt.tight_layout()
-plt.show()
+# plt.show()
 
 # Decompondo o Ruído da Série
 df['Ruído'] = decomposicao.resid
 # Visualizando Série e Ruído graficamente
 df[['ProductP3', 'Ruído']].plot(title='Série e Vendas')
-plt.show()
+# plt.show()
 
 # Verificação de estacionariedade
 from statsmodels.tsa.stattools import adfuller
@@ -46,8 +46,13 @@ resultado_sazonal = adfuller(df['Diferenciada_Sazonal'].dropna())
 print(f"P-valor após diferenciação sazonal: {resultado_sazonal[1]}")
 
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-# Plotando gráficos ACF e PACF para estimar modelos
-fig, axes = plt.subplot(2, 1, figsize=(12, 6))
-plot_acf(df['Diferenciada_Sazonal'].dropna(), ax=axes[0], lags=36, title="ACF")
-plot_pacf(df['Diferenciada_Sazonal'].dropna(), ax=axes[1], lags=36, title="PACF")
-plt.show()
+# Plotando gráfico ACF
+plt.subplot(1, 2, 1)
+plot_acf(df['Diferenciada_Sazonal'].dropna(), ax=plt.gca(), lags=36, title="ACF")
+# Plotando gráfico PACF
+plt.subplot(1, 2, 2)
+plot_pacf(df['Diferenciada_Sazonal'].dropna(), ax=plt.gca(), lags=36, title="PACF")
+# plt.show()
+
+# Ajustando o modelo e validando
+from statsmodels.tsa.statespace.sarimax import SARIMAX
